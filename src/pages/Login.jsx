@@ -11,6 +11,7 @@ import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 
 import { auth } from "../utils/firebaseSetup";
 import Navbar from "../components/Navbar";
+import { GetUserRoleFromFirestore } from "../utils/firebaseRequest";
 
 
 const style = {
@@ -56,13 +57,21 @@ const Login = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
       const user = userCredential.user;
-
-      setUser(user);
-      reset();
+      
+      const userRole = await GetUserRoleFromFirestore("UserRoles", user.email);
+      console.log(userRole);
+      if (userRole == 'admin') {
+        navigate('/admin');
+      } else {
+        navigate(from, { replace: true });
+      }
+      
+      // setUser(user);
+      // reset();
       setIsLoading(false);
 
       toast.success("Conta acessada!", { id: toastId });
-      navigate(from, { replace: true });
+      // navigate(from, { replace: true });
     } catch (error) {
       setIsLoading(false);
 

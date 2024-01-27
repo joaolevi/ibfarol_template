@@ -65,3 +65,19 @@ export const GetDocumentById = async (collection, docId) => {
     console.log("No such document!");
   }
 };
+
+export const GetUserRoleFromFirestore = async (collection, userId) => {
+  try {
+    const userDoc = await getDoc(doc(db, collection, userId)); // Supondo que você tenha uma coleção 'users' onde cada documento é identificado pelo ID do usuário
+    if (userDoc.exists()) {
+      const userData = userDoc.data();
+      return userData.role; // Supondo que 'role' é o campo que armazena a função do usuário
+    } else {
+      throw new Error('User document not found');
+    }
+  } catch (error) {
+    console.error('Error fetching user role:', error);
+    return null;
+  }
+};
+

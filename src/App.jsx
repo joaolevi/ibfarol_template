@@ -38,6 +38,7 @@ import Waitlist from "./pages/dashboard/Waitlist";
 import TornarMembro from "./pages/TornarMembro";
 import GaleriaFotos from "./pages/GaleriaFotos";
 import Perfil from "./pages/Perfil";
+import Admin from "./pages/Admin";
 
 import SubscribeToEvent from "./pages/SubscribeToEvent";
 import ConfirmacaoPagamento from "./pages/ConfirmacaoPagamento";
@@ -63,6 +64,7 @@ const App = () => {
             <Route path="/pagamentopendente" element={<PagamentoPendente />} />
             <Route path="/cadastro" element={<CadastroConta />} />
             <Route path="/perfil" element={<Perfil />} />
+            <Route path="/Admin" element={<Admin />} />
           </Route>
 
           <Route path="/login" element={<Login />} />
