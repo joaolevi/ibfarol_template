@@ -1,17 +1,16 @@
 // Perfil.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { Outlet } from "react-router-dom";
 import PerfilSidebar from '../components/PerfilSidebar';
 import { db } from "../utils/firebaseSetup"
 import useAuth from "../hooks/useAuth";
 import DadosInscricaoEncibaf from '../components/DadosInscricaoEcibaf';
+import GeradorLinks from '../components/GeradorLinks';
 
 const Perfil = () => {
   const navigate = useNavigate(); // Utilize o useNavigate para navegação
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
   const { user } = useAuth()
   const [docSnap, setDocSnap] = useState(null); 
 
@@ -20,6 +19,7 @@ const Perfil = () => {
       try {
         if (!user) {
           // Redireciona para a página de login se o usuário não estiver autenticado
+          console.log("Sem usuário logado")
           navigate('/login');
           return;
         }
@@ -43,18 +43,11 @@ const Perfil = () => {
 
   return (
     <main className="grid grid-cols-1 lg:grid-cols-[280px_1fr] mt-10">
-      <PerfilSidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
+      <PerfilSidebar setActiveTab={setActiveTab}/>
       <div className="h-full w-full mb-10 pr-10 pl-2 max-w-[1900px]">
-        {/* Renderize o DadosInscricaoEncibaf e passe o docSnap como propriedade */}
-        <DadosInscricaoEncibaf docSnap={docSnap} />
-
-        {/* Adicione outros elementos conforme necessário */}
-        {/* <button onClick={() => navigate('/inscricao')}>Inscrição ENCIBAF</button> */}
-        {/* <button onClick={handleLogout}>Logout</button> */}
-        {/* <Outlet context={[sidebarOpen, setSidebarOpen]} /> */}
+        {/* Renderização condicional do componente com base no activeTab */}
+        {activeTab === 0 && <DadosInscricaoEncibaf docSnap={docSnap} />}
+        {activeTab === 1 && <GeradorLinks docSnap={docSnap}/>}
       </div>
   </main>
   );

@@ -106,8 +106,8 @@ const Navbar = () => {
           <div className="border-b border-gray-200/70 px-5 py-3">
             <NavLink onClick={closeMenu} to="/">
               <img
-                src="/logo.svg"
-                alt="Puthi Pallab"
+                src="/logo.png"
+                alt="Igreja Batista do Farol"
                 className="h-10 md:h-12"
               />
             </NavLink>

@@ -24,7 +24,7 @@ const DadosInscricaoEncibaf = ({ docSnap }) => {
 
   return (
     <div className="border border-gray-300 rounded p-4 my-4 shadow-md overflow-auto bg-[#F6F7FB]">
-        <StatusPagamento inscricaoPaga={userData.inscricaoPaga} />
+        {/* <StatusPagamento inscricaoPaga={userData.inscricaoPaga} /> */}
       <h2 className="text-2xl font-bold mb-4">Dados da Inscrição</h2>
       <div className="ml-4">
         <h2 className="text-xl font-bold mb-4">Esposa</h2>

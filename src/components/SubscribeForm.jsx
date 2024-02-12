@@ -5,6 +5,19 @@ import { AddDocumentWithId } from "../utils/firebaseRequest";
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../utils/firebaseSetup';
 
+const getLoteFromDataSubscription = (dataInscricao) => {
+  const hoje = new Date();
+  const primeiroDeMarco = new Date(hoje.getFullYear(), 2, 1); // março é o terceiro mês (índice 2)
+  const quintoDeMaio = new Date(hoje.getFullYear(), 4, 5); // maio é o quinto mês (índice 4)
+
+  if (dataInscricao < primeiroDeMarco) {
+    return 1;
+  } else if (dataInscricao >= primeiroDeMarco && dataInscricao <= quintoDeMaio) {
+    return 2;
+  } else {
+    return 3;
+  }
+};
 
 const SubscribeForm = () => {
   const navigate = useNavigate();
@@ -21,6 +34,7 @@ const SubscribeForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const dataInscricao = new Date();
     const data = {
       wifeName: e.target.wifeName.value,
       wifeBirthdate: e.target.wifeBirthdate.value,
@@ -53,7 +67,19 @@ const SubscribeForm = () => {
       ride: e.target.ride.value,
       busTransport: e.target.busTransport.value,
       observations: e.target.observations.value,
-      inscricaoPaga: false
+      inscricaoPaga: false,
+      dataInscricao: dataInscricao,
+      loteInscricao: getLoteFromDataSubscription(dataInscricao),
+      parcela01: false,
+      parcela02: false,
+      parcela03: false,
+      parcela04: false,
+      parcela05: false,
+      parcela06: false,
+      parcela07: false,
+      parcela08: false,
+      parcela09: false,
+      parcela10: false
     };
 
     try {

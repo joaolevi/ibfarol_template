@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FiUser, FiUsers } from "react-icons/fi";
 import { LuFileClock } from "react-icons/lu";
@@ -19,75 +19,29 @@ const memberMenuItems = [
     path: "#",
     icon: <MdDashboard />,
   },
-];
-
-const librarianMenuItems = [
   {
-    title: "Overview",
-    path: "overview",
-    icon: <MdDashboard />,
-  },
-  {
-    title: "Books",
-    path: "books",
-    icon: <TbBooks />,
-  },
-  {
-    title: "Genres",
-    path: "genres",
-    icon: <TfiList />,
-  },
-  {
-    title: "Issue Book",
-    path: "issue-book",
-    icon: <TbBookUpload />,
-  },
-  {
-    title: "Return Book",
-    path: "return-book",
-    icon: <TbBookOff />,
-  },
-  {
-    title: "Issue Records",
-    path: "issue-records",
-    icon: <TfiLayoutListThumb />,
-  },
-  {
-    title: "Users",
-    path: "users",
-    icon: <FiUsers />,
-  },
-  {
-    title: "Waitlist",
-    path: "waitlist",
+    title: "Pagamentos",
+    path: "#",
     icon: <LuFileClock />,
-  },
-  {
-    title: "Reviews",
-    path: "reviews",
-    icon: <MdOutlineReviews />,
-  },
+  }
 ];
 
-const MenuLink = ({ path, title, icon }) => (
-  <NavLink
-    to={`${path}`}
-    className={
-      "dashboardMenu flex items-center gap-3 border-white px-8 py-3 font-light text-[#808080] duration-300 hover:bg-[#FEF2E2] hover:text-primary sm:py-3.5 sm:text-base [&.active]:border-r-4 [&.active]:border-primary [&.active]:bg-[#FEF2E2] [&.active]:text-primary"
-    }
-  >
-    <span className="text-lg sm:text-xl">{icon}</span>
-    <span className="text-xs sm:text-sm">{title}</span>
-  </NavLink>
-);
-
-const PerfilSidebar = ({ sidebarOpen, setSidebarOpen }) => {
+const PerfilSidebar = ({ setActiveTab }) => {
   const location = useLocation();
   const { user } = useAuth()
   const toastId = React.useRef(null);
   const navigate = useNavigate();
 
-  const queryClient = useQueryClient();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const handleToggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const handleClick = (index) => {
+    // Atualizar o estado activeTab com o índice clicado
+    setActiveTab(index);
+  };
 
   const handleLogout = async () => {
     const auth = getAuth();
@@ -106,18 +60,12 @@ const PerfilSidebar = ({ sidebarOpen, setSidebarOpen }) => {
     }
   };
 
-  const closeSidebar = () => setSidebarOpen(false);
-
-  useEffect(() => {
-    closeSidebar();
-  }, [location.pathname]);
-
   return (
     <div
       className={`group invisible fixed left-0 top-0 z-50 h-full w-full opacity-0 backdrop-blur-[2px] duration-300 lg:visible lg:static lg:opacity-100 [&.active]:visible [&.active]:opacity-100 [&.active]:duration-100 ${
-        sidebarOpen ? "active" : ""
+        false ? "active" : ""
       }`}
-      onClick={(e) => e.target.classList.contains("group") && closeSidebar()}
+      onClick={(e) => e.target.classList.contains("group") && setSidebarOpen(false)}
     >
       <aside className="sidebar h-full w-64 -translate-x-full duration-300 group-[&.active]:-translate-x-0 lg:w-full lg:-translate-x-0">
         <div className="sidebarContent h-[calc(100vh-64px)] overflow-y-auto pb-5 sm:h-[calc(100vh-80px)] sm:pb-10">
@@ -127,14 +75,17 @@ const PerfilSidebar = ({ sidebarOpen, setSidebarOpen }) => {
                 Menu
               </p>
               <nav className="flex flex-col gap-1 sm:gap-1.5">
-                {(user.role === "librarian"
-                  ? librarianMenuItems
-                  : memberMenuItems
-                ).map(({ title, path, icon }, index) => (
-                  <MenuLink path={path} title={title} icon={icon} key={index} />
+                {memberMenuItems.map(({ title}, index) => (
+                  <button
+                    className={`dashboardMenu flex items-center gap-3 border-white px-8 py-3 font-light text-[#808080] duration-300 hover:bg-[#FEF2E2] hover:text-primary sm:py-3.5 sm:text-base [&.active]:border-r-4 [&.active]:border-primary [&.active]:bg-[#FEF2E2] [&.active]:text-primary`}
+                    onClick={() => handleClick(index)}
+                    key={index}
+                  >
+                    <span className="absolute bottom-0 left-0 h-[3px] w-0 bg-primary duration-300 group-[&.active]:w-12 group-[&:not(.active):hover]:w-full"></span>
+                    {title}
+                </button>
                 ))}
                 <hr className="border-gray-200/70" />
-                <MenuLink path="#" title="Perfil" icon={<FiUser />} />
 
                 <button
                   className="flex items-center gap-3 px-8 py-3 text-[#808080] duration-300 hover:text-primary"

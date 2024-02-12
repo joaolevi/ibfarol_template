@@ -133,7 +133,7 @@ const DashboardSidebar = ({ sidebarOpen, setSidebarOpen }) => {
             <img
               className="h-10 sm:h-auto"
               src="/logo.svg"
-              alt="Puthi Pallab"
+              alt="IBFarol"
             />
           </NavLink>
         </div>
