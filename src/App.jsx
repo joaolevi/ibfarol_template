@@ -63,12 +63,12 @@ const App = () => {
             <Route path="/confpag" element={<ConfirmacaoPagamento />} />
             <Route path="/pagamentopendente" element={<PagamentoPendente />} />
             <Route path="/cadastro" element={<CadastroConta />} />
-            <Route path="/perfil" element={<Perfil />} />
             <Route path="/Admin" element={<Admin />} />
           </Route>
 
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/perfil" element={<Perfil />} />
           <Route path="/verify-email/:token" element={<VerifyEmail />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />

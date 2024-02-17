@@ -6,18 +6,16 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../utils/firebaseSetup';
 
 const getLoteFromDataSubscription = (dataInscricao) => {
-  const hoje = new Date();
-  const primeiroDeMarco = new Date(hoje.getFullYear(), 2, 1); // março é o terceiro mês (índice 2)
-  const quintoDeMaio = new Date(hoje.getFullYear(), 4, 5); // maio é o quinto mês (índice 4)
+  const [dayToday, monthToday] = dataInscricao.split('/');
 
-  if (dataInscricao < primeiroDeMarco) {
+  if (monthToday <= 2) {
     return 1;
-  } else if (dataInscricao >= primeiroDeMarco && dataInscricao <= quintoDeMaio) {
+  } else if (monthToday == 3 || monthToday == 4 || (monthToday == 5 && dayToday <= 5)) {
     return 2;
-  } else {
-    return 3;
+  } else if (monthToday == 5 && dayToday > 5) {
+    return 3
   }
-};
+}
 
 const SubscribeForm = () => {
   const navigate = useNavigate();

@@ -1,12 +1,14 @@
-// Perfil.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
-import PerfilSidebar from '../components/PerfilSidebar';
+import PerfilSidebar, { SidebarItem } from '../components/PerfilSidebar';
 import { db } from "../utils/firebaseSetup"
 import useAuth from "../hooks/useAuth";
 import DadosInscricaoEncibaf from '../components/DadosInscricaoEcibaf';
 import GeradorLinks from '../components/GeradorLinks';
+import { BookText, LogOutIcon, Receipt } from 'lucide-react';
+import { toast } from 'react-hot-toast';
+import { getAuth, signOut } from 'firebase/auth';
 
 const Perfil = () => {
   const navigate = useNavigate(); // Utilize o useNavigate para navegação
@@ -39,17 +41,33 @@ const Perfil = () => {
     };
 
     fetchData();
-  }, [navigate]);
+  }, [navigate, user]);
+
+  const handleLogout = async () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      navigate('/login');
+      toast.success('Saiu da conta com sucesso');
+    }).catch((error) => {
+      toast.error('Erro ao sair da conta');
+    });
+  }
 
   return (
-    <main className="grid grid-cols-1 lg:grid-cols-[280px_1fr] mt-10">
-      <PerfilSidebar setActiveTab={setActiveTab}/>
+    <main style={{ display: 'flex' }}>
+      {/* Barra lateral */}
+      <PerfilSidebar userEmail={user ? user.email : null}>
+        <SidebarItem icon={<BookText />} text="Inscrição" active={activeTab === 0} onClick={() => setActiveTab(0)} />
+        <SidebarItem icon={<Receipt />} text="Pagamento" active={activeTab === 1} onClick={() => setActiveTab(1)} />
+        <hr className="my-3" />
+        <SidebarItem icon={<LogOutIcon />} text="Sair" onClick={handleLogout} />
+      </PerfilSidebar>
+      
       <div className="h-full w-full mb-10 pr-10 pl-2 max-w-[1900px]">
-        {/* Renderização condicional do componente com base no activeTab */}
         {activeTab === 0 && <DadosInscricaoEncibaf docSnap={docSnap} />}
-        {activeTab === 1 && <GeradorLinks docSnap={docSnap}/>}
+        {activeTab === 1 && <GeradorLinks docSnap={docSnap} />}
       </div>
-  </main>
+    </main>
   );
 };
 
