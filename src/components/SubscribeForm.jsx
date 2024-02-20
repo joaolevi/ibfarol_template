@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../utils/firebaseSetup';
 
 const getLoteFromDataSubscription = (dataInscricao) => {
-  const [dayToday, monthToday] = dataInscricao.split('/');
+  const dayToday = dataInscricao.getDate(); 
+  const monthToday = dataInscricao.getMonth() + 1;
 
   if (monthToday <= 2) {
     return 1;
