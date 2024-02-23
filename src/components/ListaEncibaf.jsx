@@ -1,13 +1,13 @@
 import React from 'react';
-import StatusPagamento from './StatusPagamento';
 
 const ListaEncibaf = ({ docSnap }) => {
     const userData = docSnap
 
   return (
-    <div className="border border-gray-300 rounded p-4 my-4 shadow-md overflow-auto bg-[#F6F7FB]">
+    <div>
         {/* <StatusPagamento inscricaoPaga={userData.inscricaoPaga} /> */}
-      <h2 className="text-2xl font-bold mb-4">Dados da Inscrição</h2>
+      <hr className="my-4 border-gray-300"/>
+      <h2 className="text-2xl font-bold mb-4 mt-4">Dados da Inscrição</h2>
       <div className="ml-4">
         <h2 className="text-xl font-bold mb-4">Esposa</h2>
         <p><strong>Nome:</strong> {userData.wifeName}</p>
