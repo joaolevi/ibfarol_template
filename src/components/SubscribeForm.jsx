@@ -4,6 +4,7 @@ import { MdAlternateEmail } from "react-icons/md";
 import { AddDocumentWithId } from "../utils/firebaseRequest";
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../utils/firebaseSetup';
+import { set } from "date-fns";
 
 const getLoteFromDataSubscription = (dataInscricao) => {
   const dayToday = dataInscricao.getDate(); 
@@ -21,10 +22,13 @@ const getLoteFromDataSubscription = (dataInscricao) => {
 const SubscribeForm = () => {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState('');
+  const [isEmailVerified, setisEmailVerified] = useState(false);
+  
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setUserEmail(user.email);
+        setisEmailVerified(user.emailVerified);
       }
     });
 
@@ -33,6 +37,12 @@ const SubscribeForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!isEmailVerified) {
+      toast.error("Seu e-mail ainda não foi verificado. Por favor, verifique seu e-mail antes de realizar a inscrição.");
+      return;
+    }
+
     const dataInscricao = new Date();
     const data = {
       wifeName: e.target.wifeName.value,

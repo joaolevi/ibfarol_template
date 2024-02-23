@@ -4,12 +4,8 @@ import toast from "react-hot-toast";
 import { MdOutlineLock, MdOutlineMailOutline } from "react-icons/md";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import AuthWrapper from "../components/AuthWrapper";
-import FullpageSpinner from "../components/FullpageSpinner";
-import useAuth from "../hooks/useAuth";
 import { useStore } from "../store";
-import { login } from "../utils/apiRequest";
-import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
-
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 const style = {
   input:
@@ -21,9 +17,7 @@ const style = {
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // const from = location.state?.from?.pathname || "/dashboard";
   const from = location.state?.from?.pathname;
-  const { user, loading } = useAuth();
 
   const [isLoading, setIsLoading] = useState(false);
   const setUser = useStore((state) => state.setUser);
@@ -32,38 +26,37 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
     reset,
   } = useForm();
-  
+
   const auth = getAuth();
-  
-  const cadastroFirebase = async (data) => {
+
+  const onSubmit = async (data) => {
     try {
       setIsLoading(true);
       const toastId = toast.loading("Cadastrando sua conta...");
-      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
-      const result = userCredential.user;
-      setIsLoading(false);
-      
-      console.log(result)
   
+      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      const user = userCredential.user;
+
+      await sendEmailVerification(user, {
+        url: 'http://www.ibfarol.com.br/login',
+      })
+  
+      setIsLoading(false);
       setUser(data.email);
       reset();
-  
-      toast.success("Cadastro bem sucedido!", { id: toastId });
-      return navigate('/', { replace: true });
-      
+      toast.success("Cadastro bem sucedido! Verifique seu e-mail.", { id: toastId });
+      return navigate('/confirmacaoemail', { replace: true });
     } catch (error) {
-        toast.error(error.message, { id: toastId });
-  
-      }
-      toast.error(result?.message || "Algo deu errado. Contate a administração!", {
-        id: toastId,
-      });
-    };
-
-  if (loading) return <FullpageSpinner />;
-  if (user) return <Navigate to={'/'} replace />;
+      setIsLoading(false);
+      console.error('Erro ao criar a conta:', error);
+      toast.error('Erro ao criar a conta. Tente novamente.');
+    }
+  };
+  const password = watch("password", "");
+  const confirmPassword = watch("confirmPassword", "");
 
   return (
     <AuthWrapper>
@@ -72,13 +65,12 @@ const Login = () => {
           <img src="/logo.svg" alt="" />
         </Link>
         <h1 className="mb-9 mt-14 text-2xl font-semibold text-[#1d1d1d]">
-          Entre com sua conta
+          Entre com seus dados para criar uma nova conta
         </h1>
 
         <form
-          aria-disabled={isLoading}
+          onSubmit={handleSubmit(onSubmit)}
           className="text-[#1d1d1d] aria-disabled:pointer-events-none aria-disabled:opacity-60"
-          onSubmit={handleSubmit(cadastroFirebase)}
         >
           <div className="mb-3">
             <div className="relative">
@@ -87,7 +79,6 @@ const Login = () => {
                 {...register("email", {
                   required: "Insira seu email",
                 })}
-                aria-invalid={errors.email ? "true" : "false"}
                 type="email"
                 placeholder="Email"
               />
@@ -99,14 +90,14 @@ const Login = () => {
               <span className={style.error}>{errors.email.message}</span>
             )}
           </div>
-          <div className="mb-2">
+            <div className="mb-2">
+            <p className="text-xs text-[#898989]">A senha deve conter no mínimo 6 caracteres e precisam coincidir</p>
             <div className="relative">
               <input
                 className={style.input}
                 {...register("password", {
                   required: "Insira sua senha",
                 })}
-                aria-invalid={errors.password ? "true" : "false"}
                 type="password"
                 placeholder="Senha"
               />
@@ -118,9 +109,36 @@ const Login = () => {
               <span className={style.error}>{errors.password.message}</span>
             )}
           </div>
+          <div className="mb-2">
+            <div className="relative">
+              <input
+                className={style.input}
+                {...register("confirmPassword", {
+                  required: "Confirme sua senha",
+                  validate: (value) =>
+                    value === password || "As senhas não coincidem",
+                })}
+                type="password"
+                placeholder="Confirmar senha"
+              />
+              <span className={style.icon}>
+                <MdOutlineLock />
+              </span>
+            </div>
+            {errors.confirmPassword && (
+              <span className={style.error}>
+                {errors.confirmPassword.message}
+              </span>
+            )}
+          </div>
           <button
             type="submit"
-            className="mt-6 block w-full rounded-lg bg-primary p-4 text-center font-semibold text-white duration-300"
+            disabled={!password || !confirmPassword || password !== confirmPassword}
+            className={`mt-6 block w-full rounded-lg p-4 text-center font-semibold text-white duration-300 ${
+              !password || !confirmPassword || password !== confirmPassword
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-primary'
+            }`}
           >
             Cadastrar
           </button>

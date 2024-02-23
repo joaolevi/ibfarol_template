@@ -44,6 +44,7 @@ import SubscribeToEvent from "./pages/SubscribeToEvent";
 import ConfirmacaoPagamento from "./pages/ConfirmacaoPagamento";
 import PagamentoPendente from "./pages/PagamentoPendente";
 import CadastroConta from "./pages/CadastroConta";
+import ConfirmacaoEmail from "./pages/ConfirmacaoEmail";
 
 const App = () => {
   return (
@@ -63,9 +64,10 @@ const App = () => {
             <Route path="/confpag" element={<ConfirmacaoPagamento />} />
             <Route path="/pagamentopendente" element={<PagamentoPendente />} />
             <Route path="/cadastro" element={<CadastroConta />} />
-            <Route path="/Admin" element={<Admin />} />
+            <Route path="/confirmacaoemail" element={<ConfirmacaoEmail />} />
           </Route>
 
+          <Route path="/Admin" element={<Admin />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/perfil" element={<Perfil />} />

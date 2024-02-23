@@ -1,18 +1,21 @@
-// Perfil.js
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
-import PerfilSidebar from '../components/PerfilSidebar';
+import PerfilSidebar, { SidebarItem } from '../components/PerfilSidebar';
 import { db } from "../utils/firebaseSetup"
 import useAuth from "../hooks/useAuth";
 import ListaEncibaf from '../components/ListaEncibaf';
+import { BookText, LogOutIcon, Receipt } from 'lucide-react';
+import ListaPagamentos from '../components/ListaPagamentos';
+import { getAuth, signOut } from 'firebase/auth';
+
 
 const Admin = () => {
   const navigate = useNavigate(); // Utilize o useNavigate para navegação
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState(0);
   const { user } = useAuth()
   const [docs, setDocsSnap] = useState([]); 
-  const [expandedItems, setExpandedItems] = useState({}); 
+  const [expandedItems, setExpandedItems] = useState({});
 
   const toggleItem = (id) => {
     setExpandedItems({
@@ -50,19 +53,45 @@ const Admin = () => {
     };
 
     fetchData();
-  }, [navigate]);
+  }, [navigate, user]);
+
+  const handleLogout = async () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      navigate('/');
+      toast.success('Saiu da conta com sucesso');
+    }).catch((error) => {
+      toast.error('Erro ao sair da conta');
+    });
+  }
 
   return (
-    <main className="grid grid-cols-1 lg:grid-cols-[280px_1fr] mt-10">
-      <PerfilSidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
+    <main style={{ display: 'flex' }}>
+      <PerfilSidebar userEmail={user ? user.email : null}>
+        <SidebarItem icon={<BookText />} text="Inscrições ENCIBAF" active={activeTab === 0} onClick={() => setActiveTab(0)} />
+        <SidebarItem icon={<Receipt />} text="Pagamentos" active={activeTab === 1} onClick={() => setActiveTab(1)} />
+        <hr className="my-3" />
+        <SidebarItem icon={<LogOutIcon />} text="Sair" onClick={handleLogout} />
+      </PerfilSidebar>
       <div className="h-full w-full mb-10 pr-10 pl-2 max-w-[1900px]">
-        {docs && docs.map((doc) => (
-        <div key={doc.id}>
-          <button onClick={() => toggleItem(doc.id)}>{doc.id}</button>
+        {activeTab === 0 && docs && docs.map((doc) => (
+        <div 
+          className="border border-gray-300 rounded p-4 my-4 shadow-md overflow-auto bg-[#F6F7FB]"
+          key={doc.id}>
+          <button
+            className="text-sm"
+            onClick={() => toggleItem(doc.id)}><strong>{doc.husbandName}</strong> & <strong>{doc.wifeName}</strong></button>
           {expandedItems[doc.id] && <ListaEncibaf docSnap={doc} />}
+        </div>
+        ))}
+        {activeTab === 1 && docs && docs.map((doc) => (
+        <div 
+          className="border border-gray-300 rounded p-4 my-4 shadow-md overflow-auto bg-[#F6F7FB]"
+          key={doc.id}>
+          <button
+            className="text-sm"
+            onClick={() => toggleItem(doc.id)}><strong>{doc.husbandName}</strong> & <strong>{doc.wifeName}</strong></button>
+          {expandedItems[doc.id] && <ListaPagamentos docSnap={doc} />}
         </div>
         ))}
       </div>
