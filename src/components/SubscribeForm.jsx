@@ -4,7 +4,7 @@ import { MdAlternateEmail } from "react-icons/md";
 import { AddDocumentWithId } from "../utils/firebaseRequest";
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../utils/firebaseSetup';
-import { set } from "date-fns";
+import { getAuth, sendEmailVerification } from 'firebase/auth';
 
 const getLoteFromDataSubscription = (dataInscricao) => {
   const dayToday = dataInscricao.getDate(); 
@@ -23,12 +23,15 @@ const SubscribeForm = () => {
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState('');
   const [isEmailVerified, setisEmailVerified] = useState(false);
-  
+
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         setUserEmail(user.email);
         setisEmailVerified(user.emailVerified);
+        await sendEmailVerification(user, {
+          url: 'http://www.ibfarol.com.br/subscribe',
+        })
       }
     });
 
@@ -70,7 +73,7 @@ const SubscribeForm = () => {
       childInfo: e.target.childInfo.value,
       emergencyContact: e.target.emergencyContact.value,
       paymentType: e.target.paymentType.value,
-      parcels: e.target.parcels.value,
+      parcels: 1,
       paydate: e.target.paydate.value,
       hasVehicle: e.target.hasVehicle.value,
       ride: e.target.ride.value,
@@ -325,52 +328,6 @@ const SubscribeForm = () => {
             </div>
           </fieldset>
 
-          <fieldset>
-            <legend className="text-xl font-bold">Em quantas Parcelas?</legend>
-            <div className="flex gap-8">
-              <span className="flex gap-1">
-                <input type="radio" id="parcels-1" name="parcels" value="1"/>
-                <label htmlFor="parcels-1">1</label>
-              </span>
-              <span className="flex gap-1">
-                <input type="radio" id="parcels-2" name="parcels" value="2" />
-                <label htmlFor="parcels-2">2</label>
-              </span>
-              <span className="flex gap-1">
-                <input type="radio" id="parcels-3" name="parcels" value="3" />
-                <label htmlFor="parcels-3">3</label>
-              </span>
-              <span className="flex gap-1">
-                <input type="radio" id="parcels-4" name="parcels" value="4" />
-                <label htmlFor="parcels-4">4</label>
-              </span>
-              <span className="flex gap-1">
-                <input type="radio" id="parcels-5" name="parcels" value="5" />
-                <label htmlFor="parcels-5">5</label>
-              </span>
-              <span className="flex gap-1">
-                <input type="radio" id="parcels-6" name="parcels" value="6" />
-                <label htmlFor="parcels-6">6</label>
-              </span>
-              <span className="flex gap-1">
-                <input type="radio" id="parcels-7" name="parcels" value="7" />
-                <label htmlFor="parcels-7">7</label>
-              </span>
-              <span className="flex gap-1">
-                <input type="radio" id="parcels-8" name="parcels" value="8" />
-                <label htmlFor="parcels-8">8</label>
-              </span>
-              <span className="flex gap-1">
-                <input type="radio" id="parcels-9" name="parcels" value="9" />
-                <label htmlFor="parcels-9">9</label>
-              </span>
-              <span className="flex gap-1">
-                <input type="radio" id="parcels-10" name="parcels" value="10" />
-                <label htmlFor="parcels-10">10</label>
-              </span>
-            </div>
-          </fieldset>
-
           <input
             name="paydate"
             type="text"
@@ -428,7 +385,14 @@ const SubscribeForm = () => {
           />
         </div>
       </div>
-      <div className="text-center md:text-left">
+        <div className="text-center md:text-left">
+          <div className="text-center">
+            <p>Se você ainda não confirmou seu email de cadastro</p>
+            <p>({userEmail ? userEmail : ""}), clique em inscrever-se.</p>
+            <p>Você receberá um email com um link de verificação.</p>
+            <p>Após a confirmação você poderá efetuar sua inscrição normalmente.</p>
+          </div>
+        <hr className="my-5" />
         <button
           type="submit"
           className="inline-flex items-center gap-2 border-2 rounded-lg border-primary bg-primary px-8 py-5 font-semibold uppercase tracking-wide text-white duration-300 hover:bg-transparent hover:text-primary"
