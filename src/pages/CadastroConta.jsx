@@ -91,7 +91,7 @@ const Login = () => {
             )}
           </div>
             <div className="mb-2">
-            <p className="text-xs text-[#898989]">A senha deve conter no mínimo 6 caracteres e precisam coincidir</p>
+            <p className="text-xs text-[#898989]">A senha deve conter no mínimo 6 caracteres e precisa coincidir</p>
             <div className="relative">
               <input
                 className={style.input}

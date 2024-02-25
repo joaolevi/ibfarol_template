@@ -56,7 +56,7 @@ const Perfil = () => {
   return (
     <main style={{ display: 'flex' }}>
       {/* Barra lateral */}
-      <PerfilSidebar userEmail={user ? user.email : null}>
+      <PerfilSidebar userEmail={user ? user.email : "user@ibfarol.com"}>
         <SidebarItem icon={<BookText />} text="Inscrição" active={activeTab === 0} onClick={() => setActiveTab(0)} />
         <SidebarItem icon={<Receipt />} text="Pagamento" active={activeTab === 1} onClick={() => setActiveTab(1)} />
         <hr className="my-3" />
