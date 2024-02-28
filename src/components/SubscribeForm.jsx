@@ -1,10 +1,10 @@
 import React, { useState, useEffect} from "react";
 import toast from "react-hot-toast";
 import { MdAlternateEmail } from "react-icons/md";
-import { AddDocumentWithId } from "../utils/firebaseRequest";
+import { AddDocumentWithId, GetCollectionSize } from "../utils/firebaseRequest";
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../utils/firebaseSetup';
-import { getAuth, sendEmailVerification } from 'firebase/auth';
+import { sendEmailVerification } from 'firebase/auth';
 
 const getLoteFromDataSubscription = (dataInscricao) => {
   const dayToday = dataInscricao.getDate(); 
@@ -93,18 +93,20 @@ const SubscribeForm = () => {
       parcela09: false,
       parcela10: false
     };
+    
+    GetCollectionSize("TesteForm").then(async collectionSize => {
+      if (collectionSize < 70) {
+        const docId = await AddDocumentWithId("TesteForm", data, userEmail);
+        toast.success("Incrição realizada com sucesso!");
+        navigate(`/pagamentopendente?token=${docId}`);
+      } else {
+        toast.error("Limite de inscrições atingido! Para saber mais, entre em contato com a secretaria da IBF.");
+      }
+    }).catch(error => {
+        console.error("Erro ao obter o tamanho da coleção:", error);
+        toast.error("Erro ao realizar inscrição!");
 
-    try {
-      // const docRef = await AddDocument("TesteForm", data);
-      const docId = await AddDocumentWithId("TesteForm", data, userEmail);
-      // const docId = docRef.id;
-      toast.success("Incrição realizada com sucesso!");
-      navigate(`/pagamentopendente?token=${docId}`);
-    } catch (error) {
-      toast.error("Erro ao realizar inscrição!");
-    }
-
-    // e.target.reset();
+    });
   };
 
   return (

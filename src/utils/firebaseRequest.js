@@ -1,5 +1,5 @@
 import { collection, addDoc, setDoc, getDocs  } from "firebase/firestore"; 
-import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, updateDoc, getCountFromServer } from "firebase/firestore";
 
 import { db } from "./firebaseSetup";
 
@@ -80,4 +80,9 @@ export const GetUserRoleFromFirestore = async (collection, userId) => {
     return null;
   }
 };
+
+export const GetCollectionSize = async (collectionName) => {
+  const querySnapshot = await getDocs(collection(db, collectionName));
+  return querySnapshot.size;
+}
 

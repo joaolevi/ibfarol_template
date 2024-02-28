@@ -43,7 +43,7 @@ const PagamentoPendente = () => {
       <TopBanner title="Inscrição ENCIBAF" background="bg-[url(/igreja/igreja_completa_facebook.jpg)]" />
       <div className="mb-8 mt-10 text-center">
         <h2 className="mb-6 text-2xl font-bold">Que bom ter vocês fazendo parte do ENCIBAF 2024!</h2>
-        <p className="mb-2 text-[15px] text-[#777]">Clique abaixo para continuar seu pagamento.</p>
+        <p className="mb-2 text-[15px] text-[#777]">Clique abaixo para seguir para o pagamento.</p>
         <div className="flex items-center justify-center">
             <a 
             href={getHrefFromDataInscricao()}
