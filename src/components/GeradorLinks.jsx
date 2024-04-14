@@ -170,7 +170,9 @@ function GeradorLinks({ docSnap }) {
       const parcelaKey = `parcela${monthIndex.toString().padStart(2, '0')}`;
       const parcelaTexto = `Parcela ${monthIndex.toString().padStart(2, '0')}`;
       // a segunda condição garante que o mês de janeiro seja considerado
-      if (parseInt((monthToday) === monthIndex) || ((parseInt(monthInscricao) == 1 || parseInt(monthInscricao) == 2) && monthIndex == 1)) {
+      let mesToday = parseInt(monthToday);
+      if (mesToday === (monthIndex) || ((parseInt(monthInscricao) == 1 || parseInt(monthInscricao) == 2) && monthIndex == 1)) {
+        console.log('entrou; '+'MonthToday: '+parseInt(monthToday)+'; MonthIndex: '+monthIndex);
         if (verificarParcela(userData[parcelaKey])) {
           parcelas.push(
             <p key={parcelaKey} className="text-green-600">
@@ -184,7 +186,7 @@ function GeradorLinks({ docSnap }) {
             </p>
           );
         }
-      } else if (parseInt(monthToday) > monthIndex) {
+      } else if (mesToday > monthIndex) {
         parcelas.push(
           <p key={parcelaKey} className="text-red-600">
             <strong>{parcelaTexto}:</strong> Parcela vencida - <a className='text-blue-600' href={links[monthIndex]} target="_blank" rel="noreferrer">Pagar</a>

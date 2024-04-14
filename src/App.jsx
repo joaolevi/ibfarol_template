@@ -40,7 +40,7 @@ import GaleriaFotos from "./pages/GaleriaFotos";
 import Perfil from "./pages/Perfil";
 import Admin from "./pages/Admin";
 
-import SubscribeToEvent from "./pages/SubscribeToEvent";
+// import SubscribeToEvent from "./pages/SubscribeToEvent";
 import ConfirmacaoPagamento from "./pages/ConfirmacaoPagamento";
 import PagamentoPendente from "./pages/PagamentoPendente";
 import CadastroConta from "./pages/CadastroConta";
@@ -60,7 +60,7 @@ const App = () => {
             <Route path="/tornarmembro" element={<TornarMembro />} />
             <Route path="/galeria" element={<GaleriaFotos />} />
             <Route path="/cultoonline" element={<CultoOnline />} />
-            <Route path="/subscribe" element={<SubscribeToEvent />} />
+            {/* <Route path="/subscribe" element={<SubscribeToEvent />} /> */}
             <Route path="/confpag" element={<ConfirmacaoPagamento />} />
             <Route path="/pagamentopendente" element={<PagamentoPendente />} />
             <Route path="/cadastro" element={<CadastroConta />} />

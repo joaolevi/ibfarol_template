@@ -22,10 +22,10 @@ const Donations = () => {
                 Banco do Bradesco
               </p>
               <p className="text-lg mb-4">
-                Agência: 2250-0
+                Agência: 03047
               </p>
               <p className="text-lg mb-4">
-                Conta: 348-4
+                Conta: 0201348-7
               </p>
               <p className="text-3sm mb-4">
                 CNPJ: 12.376.976/0001-42

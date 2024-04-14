@@ -95,7 +95,7 @@ const SubscribeForm = () => {
     };
     
     GetCollectionSize("TesteForm").then(async collectionSize => {
-      if (collectionSize < 70) {
+      if (collectionSize < 67) {
         const docId = await AddDocumentWithId("TesteForm", data, userEmail);
         toast.success("Incrição realizada com sucesso!");
         navigate(`/pagamentopendente?token=${docId}`);
