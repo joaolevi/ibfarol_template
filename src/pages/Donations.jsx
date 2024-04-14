@@ -15,7 +15,6 @@ const Donations = () => {
           <iframe width="90%%" height="315" src="https://www.youtube.com/embed/Yhp7DX8t660" title="Como entregar dízimos e ofertas neste período de quarentena." frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </div>
         <div className="lg:col-span-2 justify-center items-center">
-          <h2 className="text-3xl font-bold text-center mb-8">Transferência</h2>
           <div className="md:grid md:grid-cols-3 w-full justify-between flex flex-col gap-8">
             <div className="flex flex-col items-center">
               <p className="text-xl mb-4 font-bold">
@@ -55,6 +54,20 @@ const Donations = () => {
               <p className="text-3sm mb-4 text-center">
                 CNPJ: 12.376.976/0001-42
               </p>
+              <div className="flex justify-center">
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="overflow-hidden"
+                >
+                  <img
+                    src="/qrcode_pix_igreja.png" // Substitua pelo caminho correto da sua imagem QR Code
+                    alt="QR Code"
+                    className="w-60"
+                  />
+                </a>
+              </div>
             </div>
           </div>
         </div>
