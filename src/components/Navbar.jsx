@@ -12,16 +12,12 @@ const menuItems = [
     name: "Sobre Nós",
     path: "/about",
   },
-  // {
-  //   name: "Como Tornar-se um Membro",
-  //   path: "/tornarmembro",
-  // },
   {
     name: "Como Tornar-se um Membro",
     path: "/tornarmembro",
   },
   {
-    name: "ENCIBAF",
+    name: "Ministérios",
     path: "/ministerios",
   },
   {
